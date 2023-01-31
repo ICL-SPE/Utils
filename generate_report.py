@@ -1,5 +1,6 @@
 #!/bin/python3
-from os.path import dirname, realpath
+from os import makedirs
+from os.path import dirname, exists, join, realpath
 from subprocess import run
 
 PROJ_ROOT = dirname(realpath(__file__))
@@ -11,7 +12,10 @@ def main():
     """
     ls_cmd = "git ls-tree -r main --name-only"
     git_file_names = run(ls_cmd, shell=True, check=True, capture_output=True).stdout.decode("utf-8").split("\n")
-    out_file_name = "report.txt"
+    dir_name = "./out"
+    out_file_name = join(dir_name, "report.txt")
+    if not exists(dir_name):
+        makedirs(dir_name)
     with open(out_file_name, "w") as out_file:
         divider = "=" * 80 + "\n"
         out_file.write(divider)
